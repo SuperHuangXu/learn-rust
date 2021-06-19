@@ -1,5 +1,5 @@
 [package]
-name = "hello_cargo"
+name = "secret_number"
 version = "0.1.0"
 authors = ["SuperHuangXu <www.1567891@qq.com>"]
 edition = "2018"
