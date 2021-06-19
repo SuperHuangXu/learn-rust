@@ -24,7 +24,7 @@ fn main() {
             Ordering::Less => println!("<"),
             Ordering::Greater => println!(">"),
             Ordering::Equal => {
-                println!("=");
+                println!("猜对了～");
                 break;
             }
         }
