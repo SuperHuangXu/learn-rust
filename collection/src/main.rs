@@ -1,8 +1,6 @@
 use std::collections::HashMap;
 
-fn main() {
-    hashmap_demo()
-}
+fn main() {}
 
 fn hashmap_demo() {
     let mut hm = HashMap::new();
@@ -46,38 +44,56 @@ fn hashmap_demo() {
     println!("{:#?}", &map);
 }
 
-fn str_demo() {
+fn str_demo() -> String {
     let mut s = String::from("hello");
     s.push(' ');
     s.push_str("world~");
-    let s1 = String::from("mo ");
-    let s2 = String::from("123");
-    let s3 = s1 + &s2;
-    println!("{}", s);
-    println!("{}", s3);
 
     let s1 = String::from("mo ");
-    let s2 = String::from("123");
+    let s2 = s1 + &s;
+
+
+    let s1 = String::from("mo ");
     let s3 = format!("{}-{}", s1, s2);
-    println!("{}", s3);
+
+    s3
 }
 
-fn vec_demo() {
-    let v = vec![1, 2, 3, 4, 5];
-    let third: &i32 = &v[2];
-    println!("{}", third);
-
-    match v.get(2) {
-        Option::Some(third) => println!("{}", third),
-        Option::None => println!("none")
-    }
-
+fn vec_loop() -> Vec<i32> {
     let mut v2 = vec![100, 200, 300];
     for i in &mut v2 {
         *i += 50;
     }
+    v2
+}
 
-    for i in &v2 {
-        println!("{}", i);
+fn vec_get() -> Option<i32> {
+    let v = vec![1, 2, 3, 4, 5];
+    match v.get(2) {
+        Option::Some(third) => Some(*third),
+        Option::None => None
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{vec_get, vec_loop, str_demo};
+
+    #[test]
+    fn it_vec_get() {
+        let res = vec_get();
+        assert_eq!(res.unwrap(), 3);
+    }
+
+    #[test]
+    fn it_vec_loop() {
+        let res = vec_loop();
+        assert_eq!(res, [150, 250, 350]);
+    }
+
+    #[test]
+    fn it_str_demo() {
+        let res = str_demo();
+        assert_eq!(res, "mo -mo hello world~");
     }
 }
