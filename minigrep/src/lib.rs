@@ -23,12 +23,20 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Result<Config, String> {
+    pub fn new(mut args: std::env::Args) -> Result<Config, String> {
         if args.len() < 3 {
             return Err(String::from("参数为两个"));
         }
-        let query = args[1].clone();
-        let filename = args[2].clone();
+        args.next();
+
+        let query = match args.next() {
+            None => return Err(String::from("没有获取到 query")),
+            Some(arg) => arg
+        };
+        let filename = match args.next() {
+            None => return Err(String::from("没有获取到 file name")),
+            Some(arg) => arg
+        };
         let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
         Ok(Config {
@@ -40,25 +48,34 @@ impl Config {
 }
 
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut res = Vec::new();
-    for line in contents.lines() {
-        if line.contains(query) {
-            res.push(line);
-        }
-    }
-    res
+    // let mut res = Vec::new();
+    // for line in contents.lines() {
+    //     if line.contains(query) {
+    //         res.push(line);
+    //     }
+    // }
+    // res
+
+    // 使用迭代器方法
+    contents.lines().filter(|line| line.contains(query)).collect()
 }
 
 pub fn search_case_sensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut res = Vec::new();
-    let query = query.to_lowercase();
+    // let mut res = Vec::new();
+    // let query = query.to_lowercase();
+    //
+    // for line in contents.lines() {
+    //     if line.to_lowercase().contains(&query) {
+    //         res.push(line);
+    //     }
+    // }
+    // res
 
-    for line in contents.lines() {
-        if line.to_lowercase().contains(&query) {
-            res.push(line);
-        }
-    }
-    res
+    // 使用迭代器方法
+    contents.lines()
+        .filter(|line| line.to_lowercase()
+        .contains(&query.to_lowercase()))
+        .collect()
 }
 
 #[cfg(test)]
